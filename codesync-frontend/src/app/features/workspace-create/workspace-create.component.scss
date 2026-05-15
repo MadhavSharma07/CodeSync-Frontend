@@ -1,0 +1,48 @@
+.layout {
+  display: grid;
+  grid-template-columns: 380px minmax(0, 1fr);
+  gap: 0.8rem;
+}
+
+.create-panel,
+.list-panel {
+  min-height: 0;
+}
+
+.form-grid {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.65rem;
+}
+
+.project-list {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.project-item {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.7rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.7rem;
+  background: var(--surface-soft);
+}
+
+.project-item small {
+  display: block;
+}
+
+@media (max-width: 980px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}
+

@@ -1,0 +1,30 @@
+<header class="page-head">
+  <div>
+    <p class="eyebrow">Developer dashboard</p>
+    <h1>Welcome, {{ api.user()?.username }}</h1>
+  </div>
+  <a class="button primary" routerLink="/workspace/create">Open workspace</a>
+</header>
+
+<section class="stats">
+  <article><strong>{{ projects().length }}</strong><span>Your projects</span></article>
+  <article><strong>{{ api.user()?.role }}</strong><span>Current role</span></article>
+</section>
+
+<section class="panel">
+  <h2>Recent projects</h2>
+  <div class="project-grid">
+    @for (project of projects(); track project.projectId) {
+      <article class="project-card">
+        <span class="pill">{{ project.language }}</span>
+        <h3>{{ project.name }}</h3>
+        <p>{{ project.description || 'No description added.' }}</p>
+        <a class="button open-editor-btn" routerLink="/workspace/studio" [queryParams]="{ projectId: project.projectId }">
+          Open Editor
+        </a>
+      </article>
+    } @empty {
+      <p class="hint">No projects yet. Create one from Workspace.</p>
+    }
+  </div>
+</section>

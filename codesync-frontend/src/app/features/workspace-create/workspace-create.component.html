@@ -1,0 +1,44 @@
+<header class="page-head">
+  <div>
+    <p class="eyebrow">Workspace Setup</p>
+    <h1>Create and manage projects</h1>
+  </div>
+</header>
+
+<section class="layout">
+  <section class="panel create-panel">
+    <h2>New project</h2>
+    <div class="form-grid">
+      <input [(ngModel)]="projectForm.name" placeholder="Project name" />
+      <div class="row">
+        <select [(ngModel)]="projectForm.language">
+          @for (lang of languages(); track lang) { <option [value]="lang">{{ lang }}</option> }
+        </select>
+        <select [(ngModel)]="projectForm.visibility">
+          <option value="PUBLIC">Public</option>
+          <option value="PRIVATE">Private</option>
+        </select>
+      </div>
+      <textarea [(ngModel)]="projectForm.description" placeholder="Description"></textarea>
+      <button class="primary" (click)="createProject()">Create project</button>
+    </div>
+  </section>
+
+  <section class="panel list-panel">
+    <h2>Your projects</h2>
+    <div class="project-list">
+      @for (project of projects(); track project.projectId) {
+        <article class="project-item">
+          <div>
+            <strong>{{ project.name }}</strong>
+            <small>{{ project.language }} • {{ project.visibility }}</small>
+          </div>
+          <a class="button" routerLink="/workspace/studio" [queryParams]="{ projectId: project.projectId }">Open Studio</a>
+        </article>
+      } @empty {
+        <p class="hint">No projects yet. Create one to continue.</p>
+      }
+    </div>
+  </section>
+</section>
+

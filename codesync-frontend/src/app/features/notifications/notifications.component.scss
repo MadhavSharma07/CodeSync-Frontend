@@ -1,0 +1,33 @@
+.filter-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.filter-row button.active {
+  background: #e8fff9;
+  border-color: #25c2a0;
+  color: #103f38;
+}
+
+.notification {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+
+.row.muted {
+  color: var(--text-muted);
+}
+
+.mark-btn {
+  justify-self: start;
+  padding: 0.38rem 0.55rem;
+  font-size: 0.85rem;
+}

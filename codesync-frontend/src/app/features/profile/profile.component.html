@@ -1,0 +1,9 @@
+<section class="settings">
+  <p class="eyebrow">Account</p>
+  <h1>Profile settings</h1>
+  <input [(ngModel)]="form.username" placeholder="Username" />
+  <input [(ngModel)]="form.fullName" placeholder="Full name" />
+  <input [(ngModel)]="form.avatarUrl" placeholder="Avatar URL" />
+  <textarea [(ngModel)]="form.bio" placeholder="Bio"></textarea>
+  <button class="primary" (click)="save()">Save profile</button>
+</section>

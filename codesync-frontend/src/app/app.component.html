@@ -1,0 +1,50 @@
+@if (user()) {
+  <main class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" routerLink="/dashboard">
+        <span class="brand-mark">CS</span>
+        <span>
+          <strong>CodeSync</strong>
+          <small>Code Together. Build Faster.</small>
+        </span>
+      </a>
+
+      <nav>
+        <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+        <a routerLink="/explore" routerLinkActive="active">Explore</a>
+        <a routerLink="/workspace/create" routerLinkActive="active">Workspace</a>
+        <a class="nav-item" routerLink="/notifications" routerLinkActive="active">
+          <span>Notifications</span>
+          @if (unreadCount() > 0) {
+            <span class="pill">{{ unreadCount() }}</span>
+          }
+        </a>
+        <a routerLink="/profile" routerLinkActive="active">Profile</a>
+        @if (user()?.role === 'ADMIN') {
+          <a routerLink="/admin" routerLinkActive="active">Admin</a>
+        }
+      </nav>
+
+      <section class="user-card">
+        <div class="avatar">{{ user()?.username?.slice(0, 2)?.toUpperCase() }}</div>
+        <div>
+          <strong>{{ user()?.username }}</strong>
+          <small>{{ user()?.role }}</small>
+        </div>
+        <button (click)="logout()">Logout</button>
+      </section>
+    </aside>
+
+    <section class="content">
+      @if (toast.message()) {
+        <div class="toast">{{ toast.message() }}</div>
+      }
+      <router-outlet />
+    </section>
+  </main>
+} @else {
+  @if (toast.message()) {
+    <div class="toast">{{ toast.message() }}</div>
+  }
+  <router-outlet />
+}

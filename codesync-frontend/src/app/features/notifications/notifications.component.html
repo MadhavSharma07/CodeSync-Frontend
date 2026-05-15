@@ -1,0 +1,42 @@
+<section class="settings">
+  <div class="page-head">
+    <div>
+      <p class="eyebrow">Inbox</p>
+      <h1>Notifications</h1>
+      <small class="hint">{{ unreadCount() }} unread</small>
+    </div>
+    <div class="actions">
+      <button (click)="refreshAll()">Refresh</button>
+      <button (click)="markAllRead()" [disabled]="unreadCount() === 0">Mark all read</button>
+      <button (click)="clearRead()">Clear read</button>
+    </div>
+  </div>
+
+  <div class="filter-row">
+    <button [class.active]="activeFilter() === 'all'" (click)="setFilter('all')">All</button>
+    <button [class.active]="activeFilter() === 'unread'" (click)="setFilter('unread')">Unread</button>
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Loading notifications...</p>
+  } @else {
+    @for (item of items(); track trackById($index, item)) {
+      <article class="notification" [class.unread]="!item.isRead">
+        <div class="row">
+          <strong>{{ item.title }}</strong>
+          @if (!item.isRead) { <span class="pill">New</span> }
+        </div>
+        <p>{{ item.message }}</p>
+        <div class="row muted">
+          <small>{{ item.type }}</small>
+          <small>{{ item.createdAt || '' }}</small>
+        </div>
+        @if (!item.isRead) {
+          <button class="mark-btn" (click)="markRead(item)">Mark read</button>
+        }
+      </article>
+    } @empty {
+      <p class="hint">No notifications.</p>
+    }
+  }
+</section>

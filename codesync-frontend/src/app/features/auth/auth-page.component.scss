@@ -1,0 +1,123 @@
+.auth-page {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 430px;
+  background: #101820;
+  color: #f7fafc;
+}
+
+.intro {
+  display: grid;
+  align-content: center;
+  gap: 1rem;
+  padding: 4rem clamp(2rem, 7vw, 6rem);
+  background:
+    linear-gradient(rgba(16, 24, 32, 0.1), rgba(16, 24, 32, 0.85)),
+    url("https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=1600&q=80") center/cover;
+}
+
+.brand-mark {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 8px;
+  background: #25c2a0;
+  color: #081113;
+  font-weight: 800;
+}
+
+.eyebrow {
+  color: #25c2a0;
+  font-weight: 800;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+h1 {
+  max-width: 720px;
+  font-size: clamp(2.4rem, 6vw, 5rem);
+  line-height: 0.98;
+  margin: 0;
+}
+
+.intro p:last-child {
+  max-width: 650px;
+  color: #dbe6ee;
+  font-size: 1.05rem;
+}
+
+.auth-card {
+  display: grid;
+  align-content: center;
+  gap: 0.9rem;
+  padding: 1.6rem;
+  background: #f3f7fc;
+  color: #17202a;
+}
+
+.tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.tabs a {
+  text-align: center;
+  color: #17202a;
+  text-decoration: none;
+  border: 1px solid #ccd6e0;
+  border-radius: 8px;
+  padding: 0.7rem;
+}
+
+.tabs a.active {
+  background: #e8fff9;
+  border-color: #25c2a0;
+}
+
+.form-shell {
+  background: #ffffff;
+  border: 1px solid #dce6f1;
+  border-radius: 8px;
+  padding: 1rem;
+  display: grid;
+  gap: 0.65rem;
+}
+
+.form-shell h2 {
+  margin: 0;
+}
+
+.form-shell label {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.form-shell label span {
+  font-size: 0.82rem;
+  color: #586c82;
+  font-weight: 600;
+}
+
+.role-chooser {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.45rem;
+}
+
+.role-chooser button {
+  padding: 0.55rem 0.45rem;
+}
+
+.role-chooser button.active {
+  background: #e8fff9;
+  border-color: #25c2a0;
+  color: #103f38;
+}
+
+@media (max-width: 900px) {
+  .auth-page {
+    grid-template-columns: 1fr;
+  }
+}

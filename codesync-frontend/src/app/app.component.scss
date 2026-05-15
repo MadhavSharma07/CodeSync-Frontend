@@ -1,0 +1,110 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  background: var(--bg);
+}
+
+.app-shell {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  min-height: 100vh;
+}
+
+.sidebar {
+  background: #0e1a2b;
+  color: #f7fafc;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  border-right: 1px solid #1d2d41;
+}
+
+.brand,
+.user-card {
+  color: inherit;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.brand-mark,
+.avatar {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 8px;
+  background: #25c2a0;
+  color: #081113;
+  font-weight: 800;
+}
+
+.brand small,
+.user-card small {
+  display: block;
+  color: #8da2b5;
+}
+
+nav {
+  display: grid;
+  gap: 0.35rem;
+}
+
+nav a {
+  color: #dbe6ee;
+  text-decoration: none;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 0.64rem 0.74rem;
+}
+
+nav a.nav-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+nav a.active {
+  border-color: #25c2a0;
+  background: #e8fff9;
+  color: #103f38;
+}
+
+.user-card {
+  margin-top: auto;
+  border-top: 1px solid #263846;
+  padding-top: 0.9rem;
+}
+
+.user-card button {
+  margin-left: auto;
+  background: transparent;
+  color: #f7fafc;
+  border-color: #314454;
+}
+
+.content {
+  padding: 1rem 1.1rem;
+  min-width: 0;
+}
+
+.toast {
+  position: fixed;
+  right: 1rem;
+  top: 1rem;
+  z-index: 5;
+  background: #101820;
+  color: #ffffff;
+  border-radius: 8px;
+  padding: 0.85rem 1rem;
+  box-shadow: 0 10px 30px rgba(16, 24, 32, 0.22);
+}
+
+@media (max-width: 900px) {
+  .app-shell {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,58 @@
+<main class="auth-page">
+  <section class="intro">
+    <div class="brand-mark">CS</div>
+    <p class="eyebrow">CodeSync</p>
+    <h1>Code Together. Build Faster. Ship Smarter.</h1>
+    <p>Online code collaboration platform with projects, live editor, execution, snapshots, review comments, and notifications.</p>
+  </section>
+
+  <section class="auth-card">
+    <div class="tabs">
+      <a routerLink="/auth/login" [class.active]="mode() === 'login'">Login</a>
+      <a routerLink="/auth/register" [class.active]="mode() === 'register'">Register</a>
+    </div>
+
+    @if (mode() === 'login') {
+      <div class="form-shell">
+        <h2>Welcome back</h2>
+        <p class="hint">Sign in to continue to your projects and workspace.</p>
+        <div class="role-chooser">
+          <button [class.active]="loginTarget === 'DEVELOPER'" (click)="loginTarget = 'DEVELOPER'" type="button">Developer Console</button>
+          <button [class.active]="loginTarget === 'ADMIN'" (click)="loginTarget = 'ADMIN'" type="button">Admin Console</button>
+        </div>
+        <label>
+          <span>Email</span>
+          <input [(ngModel)]="loginForm.email" placeholder="name@example.com" autocomplete="email" />
+        </label>
+        <label>
+          <span>Password</span>
+          <input [(ngModel)]="loginForm.password" placeholder="Your password" type="password" autocomplete="current-password" />
+        </label>
+        <button class="primary" (click)="login()" [disabled]="loading">Sign in</button>
+      </div>
+    } @else {
+      <div class="form-shell">
+        <h2>Create account</h2>
+        <p class="hint">Set up your CodeSync account to start creating workspaces.</p>
+        <label>
+          <span>Full name</span>
+          <input [(ngModel)]="registerForm.fullName" placeholder="Your full name" autocomplete="name" />
+        </label>
+        <label>
+          <span>Username</span>
+          <input [(ngModel)]="registerForm.username" placeholder="Choose a username" autocomplete="username" />
+        </label>
+        <label>
+          <span>Email</span>
+          <input [(ngModel)]="registerForm.email" placeholder="name@example.com" autocomplete="email" />
+        </label>
+        <label>
+          <span>Password</span>
+          <input [(ngModel)]="registerForm.password" placeholder="At least 8 characters" type="password" autocomplete="new-password" />
+        </label>
+        <small>Password minimum 8 characters. Username minimum 3 characters.</small>
+        <button class="primary" (click)="register()" [disabled]="loading">Create account</button>
+      </div>
+    }
+  </section>
+</main>

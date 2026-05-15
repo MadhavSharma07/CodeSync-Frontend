@@ -1,0 +1,149 @@
+<div class="workspace">
+  <header class="workspace-head">
+    <div>
+      <p class="eyebrow">Studio</p>
+      <h1>{{ selectedProject()?.name || 'Code Studio' }}</h1>
+    </div>
+    <a class="button nav-back" routerLink="/workspace/create">Manage Projects</a>
+  </header>
+
+  <section class="studio-controls">
+    <label class="control-field">
+      <small>Project</small>
+      <select [ngModel]="selectedProject()?.projectId" (ngModelChange)="selectProjectById($event)">
+        @for (project of projects(); track project.projectId) {
+          <option [value]="project.projectId">{{ project.name }} - {{ project.language }}</option>
+        }
+      </select>
+    </label>
+
+    <label class="control-field file-field">
+      <small>File</small>
+      <select [ngModel]="selectedFile()?.fileId" (ngModelChange)="selectFileById($event)">
+        @for (file of files(); track file.fileId) {
+          @if (!isFolder(file)) {
+            <option [value]="file.fileId">{{ file.path || file.name }}</option>
+          }
+        }
+      </select>
+    </label>
+
+    <button (click)="saveFile()" [disabled]="!selectedFile()">Save</button>
+    <button class="primary" (click)="runCode()" [disabled]="!selectedFile()">Run</button>
+  </section>
+
+  <section class="studio-layout">
+    <section class="editor-panel">
+      <div class="editor-toolbar">
+        <strong>{{ selectedFile()?.path || 'Open a file from selector' }}</strong>
+      </div>
+      <textarea
+        class="editor-textarea"
+        [ngModel]="editorValue"
+        (ngModelChange)="onEditorInput($event)"
+        [disabled]="!selectedFile()"
+        placeholder="Open a file to start editing..."
+        spellcheck="false"></textarea>
+    </section>
+
+    <aside class="right-rail">
+      <div class="mode-tabs">
+      <button [class.active]="activePanel === 'execution'" (click)="activePanel = 'execution'">Execution</button>
+      <button [class.active]="activePanel === 'snapshots'" (click)="activePanel = 'snapshots'">Snapshots</button>
+      <button [class.active]="activePanel === 'review'" (click)="activePanel = 'review'">Review</button>
+      <button [class.active]="activePanel === 'collab'" (click)="activePanel = 'collab'">Collab</button>
+      </div>
+
+      @if (activePanel === 'execution') {
+        <section class="tool-block">
+          <h3>Execution</h3>
+          <textarea [(ngModel)]="runForm.stdin" placeholder="stdin input"></textarea>
+          @if (selectedJob()) {
+            <pre>{{ selectedJob()?.status }}&#10;{{ selectedJob()?.stdout }}{{ selectedJob()?.stderr }}</pre>
+          }
+        </section>
+      }
+
+      @if (activePanel === 'snapshots') {
+        <section class="tool-block">
+          <h3>Snapshots</h3>
+          <div class="snapshot-create">
+            <input [(ngModel)]="snapshotForm.message" placeholder="Snapshot message" />
+            <input [(ngModel)]="snapshotForm.branch" placeholder="Branch" />
+            <button class="primary" (click)="createSnapshot()" [disabled]="!selectedFile()">Create</button>
+          </div>
+
+          <div class="snapshot-compare">
+            <select [ngModel]="selectedSnapshotA()" (ngModelChange)="selectedSnapshotA.set(+$event)">
+              <option [ngValue]="null">Compare A</option>
+              @for (snap of snapshots(); track snap.snapshotId) { <option [value]="snap.snapshotId">#{{ snap.snapshotId }} - {{ snap.message }}</option> }
+            </select>
+            <select [ngModel]="selectedSnapshotB()" (ngModelChange)="selectedSnapshotB.set(+$event)">
+              <option [ngValue]="null">Compare B</option>
+              @for (snap of snapshots(); track snap.snapshotId) { <option [value]="snap.snapshotId">#{{ snap.snapshotId }} - {{ snap.message }}</option> }
+            </select>
+            <button (click)="loadDiff()" [disabled]="!selectedSnapshotA() || !selectedSnapshotB()">Diff</button>
+          </div>
+
+          <div class="snapshot-list">
+            @for (snap of snapshots(); track snap.snapshotId) {
+              <article>
+                <div>
+                  <strong>#{{ snap.snapshotId }}</strong>
+                  <small>{{ snap.message }}</small>
+                </div>
+                <small>{{ snap.branch }}</small>
+              </article>
+            } @empty {
+              <small class="hint">No snapshots yet.</small>
+            }
+          </div>
+
+          <pre class="diff-output">@for (row of diffRows(); track $index) {{{ row | json }}&#10;}</pre>
+        </section>
+      }
+
+      @if (activePanel === 'review') {
+        <section class="tool-block">
+          <h3>Review</h3>
+          <input type="number" [(ngModel)]="commentForm.lineNumber" min="1" />
+          <textarea [(ngModel)]="commentForm.content" placeholder="Inline comment"></textarea>
+          <button (click)="addComment()" [disabled]="!selectedFile()">Add comment</button>
+          <div class="comments">
+            @for (comment of comments(); track comment.commentId) {
+              <button (click)="toggleComment(comment)" [class.done]="comment.resolved">
+                L{{ comment.lineNumber }} - {{ comment.content }}
+              </button>
+            }
+          </div>
+        </section>
+      }
+
+      @if (activePanel === 'collab') {
+        <section class="tool-block">
+          <h3>Live collaboration</h3>
+          <div class="collab-top">
+            <span class="status" [class.online]="collabStatus() === 'online'">
+              {{ collabStatus() === 'online' ? 'Online' : collabStatus() === 'connecting' ? 'Connecting' : 'Offline' }}
+            </span>
+            @if (collabSessionId()) { <small class="session-chip">Session: {{ collabSessionId() }}</small> }
+          </div>
+
+          <div class="collab-input">
+            <input [(ngModel)]="collabForm.sessionId" placeholder="Session id" />
+          </div>
+
+          <div class="collab-actions">
+            <button class="primary" (click)="createCollabSession()" [disabled]="!selectedProject()">Create</button>
+            <button (click)="joinCollabSession()" [disabled]="!collabForm.sessionId.trim()">Join</button>
+            <button class="danger" (click)="leaveCollab()" [disabled]="!collabSessionId()">Leave</button>
+          </div>
+
+          <div class="events-box">
+            @for (event of collabEvents(); track $index) { <small>{{ event }}</small> } @empty { <small class="hint">No events yet.</small> }
+          </div>
+        </section>
+      }
+    </aside>
+  </section>
+</div>

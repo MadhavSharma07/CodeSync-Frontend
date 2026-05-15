@@ -1,0 +1,68 @@
+<section class="settings admin-shell">
+  <p class="eyebrow">Admin</p>
+  <h1>Platform console</h1>
+
+  <div class="stats admin-stats">
+    <article class="stat-card"><strong>{{ users().length }}</strong><span>Total users</span></article>
+    <article class="stat-card"><strong>{{ visibleUsers().length }}</strong><span>Filtered users</span></article>
+    <article class="stat-card"><strong>{{ selectedRecipientIds().length }}</strong><span>Selected recipients</span></article>
+  </div>
+
+  <section class="panel filters">
+    <h2>Filters</h2>
+    <input [(ngModel)]="filter.query" (ngModelChange)="applyFilters()" placeholder="Search by username, full name, or email" />
+    <div class="row">
+      <select [(ngModel)]="filter.role" (ngModelChange)="applyFilters()">
+        <option value="ALL">All roles</option>
+        <option value="DEVELOPER">Developer</option>
+        <option value="ADMIN">Admin</option>
+      </select>
+      <select [(ngModel)]="filter.active" (ngModelChange)="applyFilters()">
+        <option value="ALL">All status</option>
+        <option value="ACTIVE">Active</option>
+        <option value="INACTIVE">Inactive</option>
+      </select>
+      <button (click)="loadUsers()">Refresh</button>
+    </div>
+  </section>
+
+  <section class="panel broadcast">
+    <h2>Broadcast</h2>
+    <input [(ngModel)]="form.title" placeholder="Title" />
+    <input [(ngModel)]="form.deepLinkUrl" placeholder="Deep link (e.g. /workspace/create)" />
+    <textarea [(ngModel)]="form.message" placeholder="Broadcast message"></textarea>
+    <label class="check">
+      <input type="checkbox" [(ngModel)]="form.onlySelected" />
+      <span>Send only to selected recipients</span>
+    </label>
+    <div class="actions">
+      <button (click)="selectVisible()">Select visible</button>
+      <button (click)="clearSelection()">Clear selection</button>
+      <button class="primary" (click)="sendBroadcast()">Send broadcast</button>
+    </div>
+  </section>
+
+  <div class="table users-table">
+    <div class="users-header">
+      <span>Select</span>
+      <span>ID</span>
+      <span>User</span>
+      <span>Role</span>
+      <span>Status</span>
+    </div>
+    @for (u of visibleUsers(); track u.userId) {
+      <label class="user-row">
+        <input type="checkbox" [checked]="selectedRecipientIds().includes(u.userId)" (change)="toggleRecipient(u.userId)" />
+        <span class="id">{{ u.userId }}</span>
+        <div>
+          <strong>{{ u.fullName || u.username }}</strong>
+          <small>{{ u.username }} - {{ u.email }}</small>
+        </div>
+        <span class="pill muted">{{ u.role }}</span>
+        <span class="pill" [class.inactive]="!u.isActive">{{ u.isActive ? 'ACTIVE' : 'INACTIVE' }}</span>
+      </label>
+    } @empty {
+      <div class="empty">No users match current filters.</div>
+    }
+  </div>
+</section>
